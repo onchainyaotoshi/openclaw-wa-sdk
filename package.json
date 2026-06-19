@@ -1,6 +1,6 @@
 {
   "name": "@yaotoshi/openclaw-wa-sdk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "TypeScript SDK for sending WhatsApp messages & reactions through the OpenClaw CAMIS gateway.",
   "type": "module",
   "license": "MIT",
