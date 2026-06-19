@@ -15,7 +15,7 @@ export function validateConfig(baseUrl: string, apiToken: string): void {
   if (!baseUrl) {
     throw new WaSdkError(
       "MISSING_CONFIG",
-      'baseUrl is required. Pass it to createWaClient({ baseUrl, apiToken }) or set the BASE_URL env var.',
+      'baseUrl is required. Pass it to createWaClient({ baseUrl, apiToken }) or set the OPENCLAW_WA_SDK_BASE_URL env var.',
     );
   }
   if (!/^https?:\/\//i.test(baseUrl)) {
@@ -33,7 +33,7 @@ export function validateConfig(baseUrl: string, apiToken: string): void {
   if (!apiToken) {
     throw new WaSdkError(
       "MISSING_CONFIG",
-      'apiToken is required. Pass it to createWaClient({ baseUrl, apiToken }) or set the API_TOKEN_WA env var.',
+      'apiToken is required. Pass it to createWaClient({ baseUrl, apiToken }) or set the OPENCLAW_WA_SDK_TOKEN env var.',
     );
   }
 }

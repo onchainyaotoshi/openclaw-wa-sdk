@@ -23,13 +23,13 @@ npm install @yaotoshi/openclaw-wa-sdk
 ```ts
 import { fromEnv, createWaClient } from "@yaotoshi/openclaw-wa-sdk";
 
-// (a) from environment — reads BASE_URL + API_TOKEN_WA
+// (a) from environment — reads OPENCLAW_WA_SDK_BASE_URL + OPENCLAW_WA_SDK_TOKEN
 const wa = fromEnv();
 
 // (b) explicit — testable, no env magic
 const wa = createWaClient({
   baseUrl: "https://example.com",
-  apiToken: process.env.API_TOKEN_WA!,
+  apiToken: process.env.OPENCLAW_WA_SDK_TOKEN!,
 });
 ```
 
@@ -44,8 +44,8 @@ const wa = fromEnv();
 
 ```bash
 # .env
-BASE_URL=https://example.com   # gateway base URL (no trailing slash)
-API_TOKEN_WA=xxxxx                                  # must match the gateway's API_TOKEN_WA
+OPENCLAW_WA_SDK_BASE_URL=https://example.com   # gateway base URL (no trailing slash)
+OPENCLAW_WA_SDK_TOKEN=xxxxx                          # must match the gateway's API_TOKEN_WA
 ```
 
 ## Methods

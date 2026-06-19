@@ -38,7 +38,7 @@ The SDK must match these **exactly**. Verified against the gateway source (`rout
 
 | Decision | Choice |
 | --- | --- |
-| Env vars | `BASE_URL` + `API_TOKEN_WA` (no `accountId`) |
+| Env vars | `OPENCLAW_WA_SDK_BASE_URL` + `OPENCLAW_WA_SDK_TOKEN` (no `accountId`) |
 | LLM-friendly = | DX for coding-LLM (types, JSDoc, validation, errors) |
 | Wraps | send-message + send-reaction only |
 | Registry | Public npm, scoped `@yaotoshi/openclaw-wa-sdk` |

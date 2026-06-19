@@ -13,7 +13,7 @@ auto-publishes to **public npm** from a GitHub repo.
 
 | Decision | Choice | Why |
 | --- | --- | --- |
-| Env vars | `BASE_URL` + `API_TOKEN_WA` only | Match the real gateway exactly; `accountId` is never used in practice (server defaults to `"default"`). |
+| Env vars | `OPENCLAW_WA_SDK_BASE_URL` + `OPENCLAW_WA_SDK_TOKEN` only | Match the real gateway exactly; `accountId` is never used in practice (server defaults to `"default"`). |
 | "LLM-friendly" = | DX for a **coding** LLM | Strict types, rich JSDoc, fail-fast validation, actionable errors, copy-paste examples. (Not tool-schemas / MCP.) |
 | Wraps | `POST /camis-openclaw/send-message` + `/camis-openclaw/send-reaction` | The only messaging endpoints. |
 | Registry | **Public npm**, scoped `@yaotoshi/openclaw-wa-sdk` | Zero consumer friction (no PAT/`.npmrc`); SDK holds no secrets (they live in each consumer's env). |

@@ -254,9 +254,9 @@ describe("fromEnv", () => {
     });
   }
 
-  it("builds a client from BASE_URL + API_TOKEN_WA", async () => {
+  it("builds a client from OPENCLAW_WA_SDK_BASE_URL + OPENCLAW_WA_SDK_TOKEN", async () => {
     await withEnv(
-      { BASE_URL: "https://env.example.com", API_TOKEN_WA: "envtok" },
+      { OPENCLAW_WA_SDK_BASE_URL: "https://env.example.com", OPENCLAW_WA_SDK_TOKEN: "envtok" },
       async () => {
         let capturedUrl = "";
         vi.stubGlobal("fetch", async (url: string) => {
@@ -272,14 +272,14 @@ describe("fromEnv", () => {
   });
 
   it("throws MISSING_CONFIG listing the missing vars", async () => {
-    await withEnv({ BASE_URL: undefined, API_TOKEN_WA: undefined }, () => {
+    await withEnv({ OPENCLAW_WA_SDK_BASE_URL: undefined, OPENCLAW_WA_SDK_TOKEN: undefined }, () => {
       try {
         fromEnv();
         throw new Error("should have thrown");
       } catch (e) {
         expect((e as WaSdkError).code).toBe("MISSING_CONFIG");
-        expect((e as Error).message).toMatch(/BASE_URL/);
-        expect((e as Error).message).toMatch(/API_TOKEN_WA/);
+        expect((e as Error).message).toMatch(/OPENCLAW_WA_SDK_BASE_URL/);
+        expect((e as Error).message).toMatch(/OPENCLAW_WA_SDK_TOKEN/);
       }
     });
   });

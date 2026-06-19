@@ -42,7 +42,7 @@ interface GatewayEnvelopeErr {
  * ```ts
  * const wa = createWaClient({
  *   baseUrl: "https://example.com",
- *   apiToken: process.env.API_TOKEN_WA!,
+ *   apiToken: process.env.OPENCLAW_WA_SDK_TOKEN!,
  * });
  * ```
  */
@@ -137,14 +137,14 @@ export function createWaClient(options: WaClientOptions): WaClient {
 }
 
 /**
- * Build a client from environment variables. Reads `BASE_URL` and `API_TOKEN_WA`.
+ * Build a client from environment variables. Reads `OPENCLAW_WA_SDK_BASE_URL` and `OPENCLAW_WA_SDK_TOKEN`.
  * Node-only convenience (the core client works in any `fetch`-capable runtime).
  *
  * @example
  * ```ts
  * // .env
- * // BASE_URL=https://example.com
- * // API_TOKEN_WA=xxxxx
+ * // OPENCLAW_WA_SDK_BASE_URL=https://example.com
+ * // OPENCLAW_WA_SDK_TOKEN=xxxxx
  * import { fromEnv } from "@yaotoshi/openclaw-wa-sdk";
  * const wa = fromEnv();
  * ```
@@ -152,12 +152,12 @@ export function createWaClient(options: WaClientOptions): WaClient {
 export function fromEnv(
   env: Record<string, string | undefined> = process.env,
 ): WaClient {
-  const baseUrl = (env.BASE_URL ?? "").trim();
-  const apiToken = (env.API_TOKEN_WA ?? "").trim();
+  const baseUrl = (env.OPENCLAW_WA_SDK_BASE_URL ?? "").trim();
+  const apiToken = (env.OPENCLAW_WA_SDK_TOKEN ?? "").trim();
   if (!baseUrl || !apiToken) {
     const missing = [
-      !baseUrl && "BASE_URL",
-      !apiToken && "API_TOKEN_WA",
+      !baseUrl && "OPENCLAW_WA_SDK_BASE_URL",
+      !apiToken && "OPENCLAW_WA_SDK_TOKEN",
     ].filter(Boolean) as string[];
     throw new WaSdkError(
       "MISSING_CONFIG",

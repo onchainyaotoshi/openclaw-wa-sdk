@@ -5,7 +5,7 @@
  * ```ts
  * const wa = createWaClient({
  *   baseUrl: "https://example.com",
- *   apiToken: process.env.API_TOKEN_WA!,
+ *   apiToken: process.env.OPENCLAW_WA_SDK_TOKEN!,
  * });
  * ```
  */
