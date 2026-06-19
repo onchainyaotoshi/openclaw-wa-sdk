@@ -1,0 +1,67 @@
+{
+  "name": "@onchainyaotoshi/openclaw-wa-sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for sending WhatsApp messages & reactions through the OpenClaw CAMIS gateway.",
+  "type": "module",
+  "license": "MIT",
+  "author": "onchainyaotoshi",
+  "homepage": "https://github.com/onchainyaotoshi/openclaw-wa-sdk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onchainyaotoshi/openclaw-wa-sdk.git",
+    "directory": "."
+  },
+  "bugs": {
+    "url": "https://github.com/onchainyaotoshi/openclaw-wa-sdk/issues"
+  },
+  "keywords": [
+    "whatsapp",
+    "wa",
+    "openclaw",
+    "camis",
+    "sdk",
+    "messaging",
+    "typescript"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build && npm run test",
+    "lint:pub": "publint && attw --pack"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.3",
+    "@types/node": "^20.17.0",
+    "publint": "^0.3.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.2"
+  }
+}
