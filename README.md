@@ -50,14 +50,14 @@ OPENCLAW_WA_SDK_TOKEN=xxxxx                          # must match the gateway's 
 
 ## Methods
 
-| Method | Args | Returns |
-| --- | --- | --- |
-| `wa.sendMessage(args)` | `{ to, message, mediaUrl? }` | `{ messageId, toJid }` |
-| `wa.reply(args)` | `{ to, messageId, message, participant?, self?, mediaUrl?, quotedText? }` | `{ messageId, toJid }` |
-| `wa.sendReaction(args)` | `{ to, messageId, emoji, participant?, self? }` | `void` |
-| `wa.reactSuccess(args)` | `{ to, messageId, participant?, self? }` → ✅ | `void` |
-| `wa.reactFailed(args)` | `{ to, messageId, participant?, self? }` → ❌ | `void` |
-| `wa.reactRemove(args)` | `{ to, messageId, participant?, self? }` | `void` |
+| Method | Args | Returns | Notes |
+| --- | --- | --- | --- |
+| `wa.sendMessage(args)` | `{ to, message, mediaUrl? }` | `{ messageId, toJid }` | plain send |
+| `wa.reply(args)` | `{ to, messageId, message, participant?, self?, mediaUrl?, quotedText? }` | `{ messageId, toJid }` | group requires `participant` unless `self:true` |
+| `wa.sendReaction(args)` | `{ to, messageId, emoji, participant?, self? }` | `void` | any emoji; `""` removes |
+| `wa.reactSuccess(args)` | `{ to, messageId, participant?, self? }` | `void` | sends ✅ |
+| `wa.reactFailed(args)` | `{ to, messageId, participant?, self? }` | `void` | sends ❌ |
+| `wa.reactRemove(args)` | `{ to, messageId, participant?, self? }` | `void` | removes the reaction |
 
 `to` is an **E.164 phone number** for a personal chat (e.g. `"+6281234567890"`) or a **group JID** (e.g. `"120363…@g.us"`).
 `participant` is the **sender of the target message** — a phone number (e.g. `"+6281287657411"`) or JID. It's **required for groups** unless `self: true`.
@@ -111,14 +111,34 @@ await wa.reply({
 
 ### React / remove a reaction
 
+React with any emoji, or use the presets:
+
 ```ts
-await wa.sendReaction({ to: "+6281234567890", messageId, emoji: "👍" }); // any emoji
-await wa.reactSuccess({ to: "+6281234567890", messageId });              // ✅
-await wa.reactFailed({ to: "+6281234567890", messageId });               // ❌
-await wa.reactRemove({ to: "+6281234567890", messageId });               // remove
+await wa.sendReaction({ to: "+6281234567890", messageId, emoji: "👍" }); // reacts with 👍
+await wa.reactSuccess({ to: "+6281234567890", messageId });             // reacts with ✅
+await wa.reactFailed({ to: "+6281234567890", messageId });              // reacts with ❌
+await wa.reactRemove({ to: "+6281234567890", messageId });              // removes the reaction
 ```
 
-For groups, pass `participant` (or `self: true` for your own message), same as `reply`.
+React to a message in a group (someone else's message → pass `participant`):
+
+```ts
+await wa.reactSuccess({
+  to: "120363xxxxxxxxxx@g.us",
+  messageId: "<inbound-msg-id>",
+  participant: "+6281287657411", // required for groups
+});
+```
+
+React to your **own** message in a group (no `participant` needed):
+
+```ts
+await wa.reactSuccess({
+  to: "120363xxxxxxxxxx@g.us",
+  messageId: "<my-msg-id>",
+  self: true,
+});
+```
 
 ## Error handling
 
