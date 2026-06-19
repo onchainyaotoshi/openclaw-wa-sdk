@@ -25,47 +25,59 @@ export interface WaClientOptions {
 }
 
 /**
- * Target of a `sendMessage` reply. Only meaningful when {@link SendMessageArgs.replyTo} is set.
+ * Recipient + ownership context shared by {@link ReplyArgs}, {@link SendReactionArgs}
+ * and {@link ReactArgs}. Drives the `self` flag semantics.
  */
-export interface ReplyTarget {
-  /** ID of the message being replied to. Required when `replyTo` is provided. */
-  messageId: string;
-  /**
-   * Whether the quoted message is **your own** outgoing message (`true`) or
-   * **someone else's** inbound message (`false`). **Defaults to `true`** — so
-   * when replying to another participant's message, explicitly pass
-   * `fromMe: false` or WhatsApp attributes the quote to you.
-   */
-  fromMe?: boolean;
-  /**
-   * Required for group targets (`…@g.us`): the JID of the original sender of the
-   * message you are replying to.
-   */
-  participant?: string;
-  /** Optional quoted text shown in the reply bubble. */
-  quotedText?: string;
-}
-
-/**
- * Arguments for {@link WaClient.sendMessage}.
- */
-export interface SendMessageArgs {
+export interface TargetContext {
   /**
    * Recipient.
    * - Personal chat: E.164 phone number, e.g. `"+6281234567890"`.
    * - Group: group JID, e.g. `"120363xxxxxxxxxx@g.us"`.
    */
   to: string;
+  /**
+   * The sender of the target message — a **phone number** (e.g. `"+6281234567890"`)
+   * or a JID (`…@s.whatsapp.net`). **Required for group targets unless `self` is `true`.**
+   * A phone is normalized to a JID by the runtime; the SDK does not over-validate the format.
+   */
+  participant?: string;
+  /**
+   * `true` when the target message is **your own** outgoing message. Sets `fromMe: true`
+   * and (for groups) auto-fills `participant` with `to` — a filler that sends correctly
+   * for self-actions. Omit (or `false`) for someone else's (inbound) message: `fromMe`
+   * becomes `false` and `participant` is required for groups.
+   */
+  self?: boolean;
+}
+
+/**
+ * Arguments for {@link WaClient.sendMessage}.
+ */
+export interface SendMessageArgs {
+  /** Recipient. E.164 phone for a personal chat, or a group JID (`…@g.us`). */
+  to: string;
   /** Message text body. Must be non-empty. */
   message: string;
   /** Optional media URL or local path (image/document/etc). */
   mediaUrl?: string;
-  /** Optional: reply to a specific message. */
-  replyTo?: ReplyTarget;
 }
 
 /**
- * Result of a successful {@link WaClient.sendMessage}.
+ * Arguments for {@link WaClient.reply}.
+ */
+export interface ReplyArgs extends TargetContext {
+  /** ID of the message being replied to. */
+  messageId: string;
+  /** Message text body. Must be non-empty. */
+  message: string;
+  /** Optional media URL or local path. */
+  mediaUrl?: string;
+  /** Optional preview text shown in the quote bubble. */
+  quotedText?: string;
+}
+
+/**
+ * Result of a successful {@link WaClient.sendMessage} / {@link WaClient.reply}.
  */
 export interface SendMessageResult {
   /** ID of the sent message (assigned by WhatsApp). */
@@ -77,21 +89,17 @@ export interface SendMessageResult {
 /**
  * Arguments for {@link WaClient.sendReaction}.
  */
-export interface SendReactionArgs {
-  /**
-   * Recipient. E.164 phone for a personal chat, or `…@g.us` for a group.
-   */
-  to: string;
+export interface SendReactionArgs extends TargetContext {
   /** ID of the message to react to (from a {@link SendMessageResult} or an inbound event). */
   messageId: string;
   /** Emoji to set. An empty string `""` **removes** the existing reaction. */
   emoji: string;
-  /**
-   * Whether the target message is **your own** (`true`) or **someone else's**
-   * inbound message (`false`). **Defaults to `true`** — pass `fromMe: false`
-   * when reacting to an inbound message.
-   */
-  fromMe?: boolean;
-  /** Required for group targets (`…@g.us`): the JID of the original sender. */
-  participant?: string;
+}
+
+/**
+ * Arguments for {@link WaClient.reactSuccess} / {@link WaClient.reactFailed} / {@link WaClient.reactRemove}.
+ */
+export interface ReactArgs extends TargetContext {
+  /** ID of the message to react to. */
+  messageId: string;
 }

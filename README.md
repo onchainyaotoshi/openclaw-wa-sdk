@@ -52,10 +52,15 @@ OPENCLAW_WA_SDK_TOKEN=xxxxx                          # must match the gateway's 
 
 | Method | Args | Returns |
 | --- | --- | --- |
-| `wa.sendMessage(args)` | `{ to, message, mediaUrl?, replyTo? }` | `{ messageId, toJid }` |
-| `wa.sendReaction(args)` | `{ to, messageId, emoji, fromMe?, participant? }` | `void` |
+| `wa.sendMessage(args)` | `{ to, message, mediaUrl? }` | `{ messageId, toJid }` |
+| `wa.reply(args)` | `{ to, messageId, message, participant?, self?, mediaUrl?, quotedText? }` | `{ messageId, toJid }` |
+| `wa.sendReaction(args)` | `{ to, messageId, emoji, participant?, self? }` | `void` |
+| `wa.reactSuccess(args)` | `{ to, messageId, participant?, self? }` → ✅ | `void` |
+| `wa.reactFailed(args)` | `{ to, messageId, participant?, self? }` → ❌ | `void` |
+| `wa.reactRemove(args)` | `{ to, messageId, participant?, self? }` | `void` |
 
 `to` is an **E.164 phone number** for a personal chat (e.g. `"+6281234567890"`) or a **group JID** (e.g. `"120363…@g.us"`).
+`participant` is the **sender of the target message** — a phone number (e.g. `"+6281287657411"`) or JID. It's **required for groups** unless `self: true`.
 
 ## Examples
 
@@ -78,28 +83,42 @@ await wa.sendMessage({
 });
 ```
 
-### Reply (in a group, `participant` is required)
+### Reply to a message
+
+Reply to **someone else's** (inbound) message — pass the sender's `participant` for groups:
 
 ```ts
-await wa.sendMessage({
+await wa.reply({
   to: "120363xxxxxxxxxx@g.us",
+  messageId: "<inbound-msg-id>",
   message: "Noted 👍",
-  replyTo: {
-    messageId: "<inbound-msg-id>",
-    participant: "62xxx@s.whatsapp.net", // who sent the quoted message
-    fromMe: false, // it's THEIR inbound message — default `true` marks it as ours
-  },
+  participant: "+6281287657411", // sender's phone (or JID); required for groups
 });
 ```
 
-> ⚠️ **`fromMe` defaults to `true`.** Both `sendMessage({ replyTo })` and `sendReaction()` assume the target message is **your own** outgoing message. When replying/reacting to someone else's **inbound** message, pass `fromMe: false` — otherwise the quote/reaction is attributed to you.
+Reply to **your own** message — set `self: true` (no `participant` needed):
+
+```ts
+await wa.reply({
+  to: "120363xxxxxxxxxx@g.us",
+  messageId: "<my-msg-id>",
+  message: "updated",
+  self: true,
+});
+```
+
+> **The `self` flag.** `self: true` means "the target message is my own" → sets `fromMe: true` and auto-fills `participant` (with `to`) for groups. Omit it for someone else's message → `fromMe: false`, and `participant` is **required** for groups. Applies to `reply` and every reaction method.
 
 ### React / remove a reaction
 
 ```ts
-await wa.sendReaction({ to: "+6281234567890", messageId, emoji: "👍" });
-await wa.sendReaction({ to: "+6281234567890", messageId, emoji: "" }); // remove
+await wa.sendReaction({ to: "+6281234567890", messageId, emoji: "👍" }); // any emoji
+await wa.reactSuccess({ to: "+6281234567890", messageId });              // ✅
+await wa.reactFailed({ to: "+6281234567890", messageId });               // ❌
+await wa.reactRemove({ to: "+6281234567890", messageId });               // remove
 ```
+
+For groups, pass `participant` (or `self: true` for your own message), same as `reply`.
 
 ## Error handling
 

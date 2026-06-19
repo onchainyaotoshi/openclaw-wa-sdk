@@ -6,7 +6,7 @@
 
 `@yaotoshi/openclaw-wa-sdk` — a tiny, fully-typed, **zero-dependency** TypeScript SDK that wraps the two WhatsApp messaging HTTP endpoints exposed by the **camis-openclaw** OpenClaw plugin. Consumers install it from **public npm** and send WhatsApp messages/reactions through the gateway, authenticating with `API_TOKEN_WA`.
 
-It is intentionally minimal: 2 methods (`sendMessage`, `sendReaction`), strict types, fail-fast validation, a single typed error class. "LLM-friendly" here means **great DX for a coding LLM** (clear names, rich JSDoc, copy-paste README, errors that say how to fix things) — *not* tool-schemas or MCP.
+It is intentionally minimal: 6 methods (`sendMessage`, `reply`, `sendReaction`, `reactSuccess`, `reactFailed`, `reactRemove`) driven by a single `self` flag, strict types, fail-fast validation, a single typed error class. "LLM-friendly" here means **great DX for a coding LLM** (clear names, rich JSDoc, copy-paste README, errors that say how to fix things) — *not* tool-schemas or MCP.
 
 ## Current status
 
@@ -34,6 +34,17 @@ The SDK must match these **exactly**. Verified against the gateway source (`rout
 
 `accountId` exists on the server (defaults to `"default"`) but is **intentionally not exposed** by the SDK (never used in practice).
 
+## SDK surface vs gateway contract (v0.2.0)
+
+The gateway accepts raw `replyTo` / `fromMe`; the SDK **does not expose them**. Mapping:
+
+- `reply()` / `sendReaction()` / `reactSuccess` / `reactFailed` / `reactRemove` build the `replyTo` / reaction body internally.
+- The **`self`** flag (on `reply` + all reactions) sets `fromMe` (`true` if `self`, else `false` — always sent explicitly, so the gateway's `true` default never leaks) and auto-fills `participant = to` for groups.
+- `participant` = sender **phone or JID**; **required for groups unless `self: true`**. The SDK does not over-validate the format (runtime `toWhatsappJid` normalizes a phone to a JID).
+- `reactSuccess`/`Failed`/`Remove` hardcode `✅`/`❌`/`""`.
+
+Design spec: `docs/superpowers/specs/2026-06-19-reply-reaction-api-design.md`.
+
 ## Locked design decisions
 
 | Decision | Choice |
@@ -52,7 +63,7 @@ src/
   index.ts     # public exports (factory + types + WaSdkError)
   client.ts    # createWaClient(), fromEnv(), HTTP core (fetch + AbortController + envelope parse + error mapping)
   types.ts     # all request/response types (exported)
-  validate.ts  # fail-fast guards mirroring server rules → WaSdkError(INVALID_REQUEST)
+  validate.ts  # validateConfig/SendMessage/Reply/SendReaction/React — group needs participant unless self → WaSdkError(INVALID_REQUEST)
   error.ts     # WaSdkError (code/status/cause) + WaErrorCode union
 test/client.test.ts   # vitest, fetch stubbed via vi.stubGlobal
 ```
