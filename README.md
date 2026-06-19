@@ -1,5 +1,8 @@
 # @onchainyaotoshi/openclaw-wa-sdk
 
+[![CI](https://github.com/onchainyaotoshi/openclaw-wa-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/onchainyaotoshi/openclaw-wa-sdk/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@onchainyaotoshi%2Fopenclaw-wa-sdk?logo=npm)](https://www.npmjs.com/package/@onchainyaotoshi/openclaw-wa-sdk)
+
 A tiny, fully-typed TypeScript SDK for sending **WhatsApp messages and reactions** through the [OpenClaw](https://github.com/onchainyaotoshi) CAMIS gateway.
 
 - **Zero runtime dependencies** — uses the global `fetch` (Node 18+, browsers, Bun, Deno).
