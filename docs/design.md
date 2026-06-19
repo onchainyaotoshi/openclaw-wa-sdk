@@ -1,4 +1,4 @@
-# Design — `@onchainyaotoshi/openclaw-wa-sdk`
+# Design — `@yaotoshi/openclaw-wa-sdk`
 
 Date: 2026-06-19
 Status: Implemented (pre-publish)
@@ -16,7 +16,7 @@ auto-publishes to **public npm** from a GitHub repo.
 | Env vars | `BASE_URL` + `API_TOKEN_WA` only | Match the real gateway exactly; `accountId` is never used in practice (server defaults to `"default"`). |
 | "LLM-friendly" = | DX for a **coding** LLM | Strict types, rich JSDoc, fail-fast validation, actionable errors, copy-paste examples. (Not tool-schemas / MCP.) |
 | Wraps | `POST /camis-openclaw/send-message` + `/camis-openclaw/send-reaction` | The only messaging endpoints. |
-| Registry | **Public npm**, scoped `@onchainyaotoshi/openclaw-wa-sdk` | Zero consumer friction (no PAT/`.npmrc`); SDK holds no secrets (they live in each consumer's env). |
+| Registry | **Public npm**, scoped `@yaotoshi/openclaw-wa-sdk` | Zero consumer friction (no PAT/`.npmrc`); SDK holds no secrets (they live in each consumer's env). |
 | Publish | New GitHub repo + GitHub Actions (`NPM_TOKEN`, provenance) on `v*` tag | Standard, free, automatic. |
 | API style | Functional factory `createWaClient()` + `fromEnv()` helper | No `new`, tree-shakeable, reads naturally, no import side-effects. |
 | `accountId` | **Not exposed** | Never used; server defaults. |

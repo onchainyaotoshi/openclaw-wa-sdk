@@ -4,7 +4,7 @@
 
 ## What this is
 
-`@onchainyaotoshi/openclaw-wa-sdk` — a tiny, fully-typed, **zero-dependency** TypeScript SDK that wraps the two WhatsApp messaging HTTP endpoints exposed by the **camis-openclaw** OpenClaw plugin. Consumers install it from **public npm** and send WhatsApp messages/reactions through the gateway, authenticating with `API_TOKEN_WA`.
+`@yaotoshi/openclaw-wa-sdk` — a tiny, fully-typed, **zero-dependency** TypeScript SDK that wraps the two WhatsApp messaging HTTP endpoints exposed by the **camis-openclaw** OpenClaw plugin. Consumers install it from **public npm** and send WhatsApp messages/reactions through the gateway, authenticating with `API_TOKEN_WA`.
 
 It is intentionally minimal: 2 methods (`sendMessage`, `sendReaction`), strict types, fail-fast validation, a single typed error class. "LLM-friendly" here means **great DX for a coding LLM** (clear names, rich JSDoc, copy-paste README, errors that say how to fix things) — *not* tool-schemas or MCP.
 
@@ -14,7 +14,7 @@ It is intentionally minimal: 2 methods (`sendMessage`, `sendReaction`), strict t
 - ✅ Builds: `npm run build` → `dist/` (dual ESM/CJS + `.d.ts`/`.d.cts`).
 - ✅ Tests: `npm run test` → 22 passing (vitest, fetch stubbed).
 - ✅ Verified dual package: `arethetypeswrong` "No problems found" (node10/node16-CJS/node16-ESM/bundler), `publint` clean, and runtime `require` + `import` both load + execute.
-- ⏳ **Not yet published.** Needs the manual steps below (npm org, `NPM_TOKEN`, GitHub repo, first `v*` tag).
+- ⏳ **Not yet published.** Needs the manual steps below (`NPM_TOKEN`, GitHub repo, first `v*` tag).
 
 ## Exact server contract (source of truth)
 
@@ -41,7 +41,7 @@ The SDK must match these **exactly**. Verified against the gateway source (`rout
 | Env vars | `BASE_URL` + `API_TOKEN_WA` (no `accountId`) |
 | LLM-friendly = | DX for coding-LLM (types, JSDoc, validation, errors) |
 | Wraps | send-message + send-reaction only |
-| Registry | Public npm, scoped `@onchainyaotoshi/openclaw-wa-sdk` |
+| Registry | Public npm, scoped `@yaotoshi/openclaw-wa-sdk` |
 | Publish | GitHub repo + Actions (`NPM_TOKEN`, provenance) on `v*` tag |
 | API style | Functional factory `createWaClient()` + `fromEnv()` |
 
@@ -73,9 +73,9 @@ npm run lint:pub       # publint + arethetypeswrong --pack  (run before every pu
 
 ## Remaining manual steps to first publish
 
-1. **Create npm org** `onchainyaotoshi` at https://www.npmjs.com/org/create (free, matches the scope).
+1. **npm scope** — `@yaotoshi` is the publisher's existing npm user scope (all other `@yaotoshi/*` packages live there). **No org creation needed.**
 2. **Create the GitHub repo** `onchainyaotoshi/openclaw-wa-sdk` (name should match the package's unscoped name; see "Naming" below). Push this folder.
-3. **Create an npm access token** (granular, publish permission on `@onchainyaotoshi/*`) → add as GitHub Actions secret **`NPM_TOKEN`**.
+3. **Create an npm access token** (granular, publish permission on `@yaotoshi/*`) → add as GitHub Actions secret **`NPM_TOKEN`**.
 4. **Tag + push** to publish:
    ```bash
    npm version patch        # bumps 0.1.0 → 0.1.1, creates v0.1.1 tag
@@ -97,7 +97,7 @@ npm run lint:pub       # publint + arethetypeswrong --pack  (run before every pu
 
 Everything is standardized on `openclaw-wa-sdk`:
 - **Folder (local):** `openclaw-wa-sdk`
-- **npm package:** `@onchainyaotoshi/openclaw-wa-sdk`
+- **npm package:** `@yaotoshi/openclaw-wa-sdk`
 - **GitHub repo:** `onchainyaotoshi/openclaw-wa-sdk`
 
 Note: the npm package name is **immutable once published** — finalize it before the first `npm publish`.

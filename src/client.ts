@@ -145,7 +145,7 @@ export function createWaClient(options: WaClientOptions): WaClient {
  * // .env
  * // BASE_URL=https://example.com
  * // API_TOKEN_WA=xxxxx
- * import { fromEnv } from "@onchainyaotoshi/openclaw-wa-sdk";
+ * import { fromEnv } from "@yaotoshi/openclaw-wa-sdk";
  * const wa = fromEnv();
  * ```
  */

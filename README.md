@@ -1,7 +1,7 @@
-# @onchainyaotoshi/openclaw-wa-sdk
+# @yaotoshi/openclaw-wa-sdk
 
 [![CI](https://github.com/onchainyaotoshi/openclaw-wa-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/onchainyaotoshi/openclaw-wa-sdk/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/@onchainyaotoshi%2Fopenclaw-wa-sdk?logo=npm)](https://www.npmjs.com/package/@onchainyaotoshi/openclaw-wa-sdk)
+[![npm version](https://img.shields.io/npm/v/@yaotoshi%2Fopenclaw-wa-sdk?logo=npm)](https://www.npmjs.com/package/@yaotoshi/openclaw-wa-sdk)
 
 A tiny, fully-typed TypeScript SDK for sending **WhatsApp messages and reactions** through the [OpenClaw](https://github.com/onchainyaotoshi) CAMIS gateway.
 
@@ -15,13 +15,13 @@ A tiny, fully-typed TypeScript SDK for sending **WhatsApp messages and reactions
 ## Install
 
 ```bash
-npm install @onchainyaotoshi/openclaw-wa-sdk
+npm install @yaotoshi/openclaw-wa-sdk
 ```
 
 ## Quick start
 
 ```ts
-import { fromEnv, createWaClient } from "@onchainyaotoshi/openclaw-wa-sdk";
+import { fromEnv, createWaClient } from "@yaotoshi/openclaw-wa-sdk";
 
 // (a) from environment — reads BASE_URL + API_TOKEN_WA
 const wa = fromEnv();
@@ -36,7 +36,7 @@ const wa = createWaClient({
 Works in CommonJS too:
 
 ```js
-const { fromEnv } = require("@onchainyaotoshi/openclaw-wa-sdk");
+const { fromEnv } = require("@yaotoshi/openclaw-wa-sdk");
 const wa = fromEnv();
 ```
 
@@ -100,7 +100,7 @@ await wa.sendReaction({ to: "+6281234567890", messageId, emoji: "" }); // remove
 All failures throw a single {@link WaSdkError} class. Discriminate on `code`:
 
 ```ts
-import { WaSdkError } from "@onchainyaotoshi/openclaw-wa-sdk";
+import { WaSdkError } from "@yaotoshi/openclaw-wa-sdk";
 
 try {
   await wa.sendMessage({ to: "+62…", message: "hi" });
