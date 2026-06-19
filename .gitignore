@@ -6,3 +6,6 @@ coverage/
 .env
 .env.*
 !.env.example
+
+# scratch / temp — never commit (user drops files here for Claude to inspect)
+tmp/
