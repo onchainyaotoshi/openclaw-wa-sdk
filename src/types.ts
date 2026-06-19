@@ -30,7 +30,12 @@ export interface WaClientOptions {
 export interface ReplyTarget {
   /** ID of the message being replied to. Required when `replyTo` is provided. */
   messageId: string;
-  /** `true` if replying to your own outgoing message. Defaults to `true`. */
+  /**
+   * Whether the quoted message is **your own** outgoing message (`true`) or
+   * **someone else's** inbound message (`false`). **Defaults to `true`** — so
+   * when replying to another participant's message, explicitly pass
+   * `fromMe: false` or WhatsApp attributes the quote to you.
+   */
   fromMe?: boolean;
   /**
    * Required for group targets (`…@g.us`): the JID of the original sender of the
@@ -81,7 +86,11 @@ export interface SendReactionArgs {
   messageId: string;
   /** Emoji to set. An empty string `""` **removes** the existing reaction. */
   emoji: string;
-  /** `true` if reacting to your own outgoing message. Defaults to `true`. */
+  /**
+   * Whether the target message is **your own** (`true`) or **someone else's**
+   * inbound message (`false`). **Defaults to `true`** — pass `fromMe: false`
+   * when reacting to an inbound message.
+   */
   fromMe?: boolean;
   /** Required for group targets (`…@g.us`): the JID of the original sender. */
   participant?: string;

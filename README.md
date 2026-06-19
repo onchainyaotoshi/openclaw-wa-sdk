@@ -84,9 +84,15 @@ await wa.sendMessage({
 await wa.sendMessage({
   to: "120363xxxxxxxxxx@g.us",
   message: "Noted 👍",
-  replyTo: { messageId: "<inbound-msg-id>", participant: "62xxx@s.whatsapp.net" },
+  replyTo: {
+    messageId: "<inbound-msg-id>",
+    participant: "62xxx@s.whatsapp.net", // who sent the quoted message
+    fromMe: false, // it's THEIR inbound message — default `true` marks it as ours
+  },
 });
 ```
+
+> ⚠️ **`fromMe` defaults to `true`.** Both `sendMessage({ replyTo })` and `sendReaction()` assume the target message is **your own** outgoing message. When replying/reacting to someone else's **inbound** message, pass `fromMe: false` — otherwise the quote/reaction is attributed to you.
 
 ### React / remove a reaction
 
